@@ -137,7 +137,7 @@ public class QuickChatApp {
     }
 
     private boolean validateRecipient(String recipient) {
-        return recipient.length() <= 10 && recipient.startsWith("+") && 
+        return recipient.length() <= 12 && recipient.startsWith("+") && 
                recipient.substring(1).matches("\\d+");
     }
 
