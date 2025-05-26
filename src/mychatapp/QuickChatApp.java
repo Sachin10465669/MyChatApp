@@ -102,7 +102,7 @@ public class QuickChatApp {
     private void createMessage(int messageNum) {
         String recipient;
         while (true) {
-            recipient = JOptionPane.showInputDialog("Message " + messageNum + "\nEnter recipient phone number (format: +1234567890):");
+            recipient = JOptionPane.showInputDialog("Message " + messageNum + "\nEnter recipient phone number (format: +27123456789):");
             if (recipient == null) return;
             if (validateRecipient(recipient)) {
                 JOptionPane.showMessageDialog(null, "Cell phone number successfully captured.");
