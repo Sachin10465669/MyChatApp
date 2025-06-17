@@ -18,13 +18,26 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Message {
-    private String messageID;
-    private int numMessagesSent;
-    private String recipient;
-    private String message;
-    private String messageHash;
+// Inside Message class, add this static method
+public static void addMessageForTest(Message msg) {
+    allMessages.add(msg);
+}
+
+    // Populate test messages
+public static void populateTestData() {
+    allMessages.add(new Message("+27111111111", "Did you get the cake?"));
+    allMessages.add(new Message("+27222222222", "Where are you? You are late! I have asked you to be on time."));
+    allMessages.add(new Message("+27333333333", "Yohoooo, I am at your gate."));
+    allMessages.add(new Message("+27444444444", "It is dinner time !"));
+    allMessages.add(new Message("+27555555555", "Ok, I am leaving without you."));
+}
+    private final String messageID;
+    private final int numMessagesSent;
+    private final String recipient;
+    private final String message;
+    private final String messageHash;
     private static int messageCounter = 1;
-    private static ArrayList<Message> allMessages = new ArrayList<>();
+    private static final ArrayList<Message> allMessages = new ArrayList<>();
 
     // Constructor
     public Message(String recipient, String message) {
@@ -153,4 +166,98 @@ public class Message {
     public String getMessage() { return message; }
     public String getMessageHash() { return messageHash; }
     public int getNumMessagesSent() { return numMessagesSent; }
+    // Display Sender and Recipient Info
+    public static String displaySenderRecipient() {
+        if (allMessages.isEmpty()) return "No messages to display.";
+        StringBuilder sb = new StringBuilder("=== Sender & Recipient Info ===\n");
+        for (Message msg : allMessages) {
+            sb.append(String.format("Sender: SystemUser | Recipient: %s\n", msg.recipient));
+        }
+        return sb.toString();
+    }
+
+    // Display Longest Message
+    public static String displayLongestMessage() {
+        if (allMessages.isEmpty()) return "No messages to check.";
+        Message longest = allMessages.get(0);
+        for (Message msg : allMessages) {
+            if (msg.message.length() > longest.message.length()) {
+                longest = msg;
+            }
+        }
+        return String.format("Longest Message:\nMessage ID: %s\nLength: %d\nMessage: %s",
+            longest.messageID, longest.message.length(), longest.message);
+    }
+
+    // Search by Message ID
+    public static String searchByMessageID(String id) {
+        for (Message msg : allMessages) {
+            if (msg.messageID.equals(id)) {
+                return String.format("Found Message:\nMessage ID: %s\nRecipient: %s\nMessage: %s\nHash: %s",
+                    msg.messageID, msg.recipient, msg.message, msg.messageHash);
+            }
+        }
+        return "No message found with ID: " + id;
+    }
+
+    // Search by Recipient
+    public static String searchByRecipient(String recipient) {
+        StringBuilder sb = new StringBuilder("Messages for recipient: " + recipient + "\n");
+        boolean found = false;
+        for (Message msg : allMessages) {
+            if (msg.recipient.equals(recipient)) {
+                found = true;
+                sb.append(String.format("- ID: %s | Message: %s | Hash: %s\n", msg.messageID, msg.message, msg.messageHash));
+            }
+        }
+        return found ? sb.toString() : "No messages found for recipient: " + recipient;
+    }
+
+    // Delete by Message Hash
+    public static String deleteByMessageHash(String hash) {
+        for (Message msg : allMessages) {
+            if (msg.messageHash.equals(hash)) {
+                allMessages.remove(msg);
+                return "Message with hash " + hash + " deleted successfully.";
+            }
+        }
+        return "No message found with the given hash: " + hash;
+    }
+
+    // Display Full Report
+    public static String displayFullReport() {
+        if (allMessages.isEmpty()) return "No messages to report.";
+        StringBuilder sb = new StringBuilder("=== Full Message Report ===\n");
+        sb.append("Total messages sent: ").append(allMessages.size()).append("\n\n");
+        for (Message msg : allMessages) {
+            sb.append(String.format("ID: %s\nRecipient: %s\nMessage: %s\nHash: %s\n\n",
+                msg.messageID, msg.recipient, msg.message, msg.messageHash));
+        }
+        return sb.toString();
+    }
+
+    // Run Unit Tests
+    public static String runUnitTests() {
+        StringBuilder sb = new StringBuilder("=== Unit Test Results ===\n");
+
+        // Sample test message
+        Message test = new Message("+27123456789", "Hello there! Testing unit methods.");
+
+        // Test 1: checkMessageID
+        sb.append("Test 1 - checkMessageID: ").append(test.checkMessageID() ? "PASS" : "FAIL").append("\n");
+
+        // Test 2: checkRecipientCell
+        sb.append("Test 2 - checkRecipientCell: ").append(test.checkRecipientCell() == 12 ? "PASS" : "FAIL").append("\n");
+
+        // Test 3: createMessageHash format
+        String hash = test.createMessageHash();
+        sb.append("Test 3 - createMessageHash (has colon & words): ").append(hash.contains(":") ? "PASS" : "FAIL").append("\n");
+
+        // Test 4: add and delete
+        allMessages.add(test);
+        String delResult = deleteByMessageHash(test.messageHash);
+        sb.append("Test 4 - Delete Message by Hash: ").append(delResult.contains("deleted") ? "PASS" : "FAIL").append("\n");
+
+        return sb.toString();
+    }
 }
