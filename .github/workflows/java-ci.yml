@@ -21,4 +21,5 @@ jobs:
         distribution: 'temurin'
 
     - name: Build with Maven
+      working-directory: MyChatApp   # <- run mvn in the subfolder with pom.xml
       run: mvn clean install
