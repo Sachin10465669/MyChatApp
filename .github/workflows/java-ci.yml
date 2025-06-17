@@ -14,12 +14,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up JDK 21
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
-        java-version: '21'
+        java-version: '17'
         distribution: 'temurin'
 
     - name: Build with Maven
-      working-directory: MyChatApp   # <- run mvn in the subfolder with pom.xml
-      run: mvn clean install
+      working-directory: MyChatApp/MyChatApp   # <- Updated path to match your structure
+      run: mvn clean compile test
+
+    - name: Run tests
+      working-directory: MyChatApp/MyChatApp
+      run: mvn test
