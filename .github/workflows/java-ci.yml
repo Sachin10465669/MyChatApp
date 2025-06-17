@@ -20,10 +20,15 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Build with Maven
-      working-directory: MyChatApp/MyChatApp   # <- Updated path to match your structure
-      run: mvn clean compile test
+    - name: Debug - Show structure
+      run: |
+        echo "=== Repository root ==="
+        ls -la
+        echo "=== MyChatApp directory ==="
+        ls -la MyChatApp/
+        echo "=== MyChatApp/MyChatApp directory ==="
+        ls -la MyChatApp/MyChatApp/
 
-    - name: Run tests
+    - name: Build with Maven
       working-directory: MyChatApp/MyChatApp
-      run: mvn test
+      run: mvn clean compile test
