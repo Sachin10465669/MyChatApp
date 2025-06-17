@@ -20,10 +20,19 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Build with Maven
-      working-directory: MyChatApp/MyChatApp   # <- Updated path to match your structure
-      run: mvn clean compile test
+    - name: Debug - Show structure
+      run: |
+        echo "=== Repository root ==="
+        ls -la
+        echo "=== MyChatApp directory ==="
+        ls -la MyChatApp/
+        if [ -f "MyChatApp/pom.xml" ]; then
+          echo "=== Found pom.xml in MyChatApp ==="
+          head -20 MyChatApp/pom.xml
+        else
+          echo "=== No pom.xml found in MyChatApp ==="
+        fi
 
-    - name: Run tests
-      working-directory: MyChatApp/MyChatApp
-      run: mvn test
+    - name: Build with Maven
+      working-directory: MyChatApp
+      run: mvn clean compile test
